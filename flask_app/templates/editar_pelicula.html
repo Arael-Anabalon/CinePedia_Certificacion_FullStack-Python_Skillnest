@@ -1,0 +1,60 @@
+{% extends 'base.html' %}
+{% block content %}
+<!-- Contenedor general -->
+<div class="container mt-4">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <!-- Mensaje de error Flash -->
+            {% with messages = get_flashed_messages(category_filter=["edit_error"]) %}
+            {% if messages %}
+            <div class="alert alert-danger p-2 small mb-3">
+                {% for message in messages %}
+                <p class="mb-0">{{ message }}</p>
+                {% endfor %}
+            </div>
+            {% endif %}
+            {% endwith %}
+            <!-- Tarjeta del formulario para editar película -->
+            <div class="card p-4 bg-light shadow-sm">
+                <form action="/cine/editar/{{ pelicula.id_pelicula }}" method="POST">
+                    <div class="mb-3 row align-items-center">
+                        <!-- Campo "Nombre de la película" -->
+                        <label for="titulo" class="col-sm-3 form-label mb-0">Nombre de Peli:</label>
+                        <div class="col-sm-9">
+                            <input type="text" class="form-control" id="titulo" name="titulo"
+                                value="{{ pelicula.titulo }}">
+                        </div>
+                    </div>
+                    <div class="mb-3 row align-items-center">
+                        <!-- Campo "Director de la película" -->
+                        <label for="director" class="col-sm-3 form-label mb-0">Director:</label>
+                        <div class="col-sm-9">
+                            <input type="text" class="form-control" id="director" name="director"
+                                value="{{ pelicula.director }}">
+                        </div>
+                    </div>
+                    <div class="mb-3 row align-items-center">
+                        <!-- Campo "Fecha de estreno de la película" -->
+                        <label for="fecha_estreno" class="col-sm-3 form-label mb-0">Fecha Estreno:</label>
+                        <div class="col-sm-9">
+                            <input type="date" class="form-control" id="fecha_estreno" name="fecha_estreno"
+                                value="{{ pelicula.fecha_estreno }}">
+                        </div>
+                    </div>
+                    <div class="mb-4 row">
+                        <!-- Campo "Sinopsis de la película" -->
+                        <label for="sinopsis" class="col-sm-3 form-label mt-1">Sinopsis:</label>
+                        <div class="col-sm-9">
+                            <textarea class="form-control" id="sinopsis" name="sinopsis"
+                                rows="4">{{ pelicula.sinopsis }}</textarea>
+                        </div>
+                    </div>
+                    <div class="text-end">
+                        <button type="submit" class="btn btn-primary px-4">Guardar Película</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

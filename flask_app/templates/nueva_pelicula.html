@@ -1,0 +1,59 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="container mt-4">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <!-- mensaje de error Flash -->
+            {% with messages = get_flashed_messages(category_filter=["peli_error"]) %}
+            {% if messages %}
+            <div class="alert alert-danger p-2 small mb-3">
+                {% for message in messages %}
+                <p class="mb-0">{{ message }}</p>
+                {% endfor %}
+            </div>
+            {% endif %}
+            {% endwith %}
+            <div class="card p-4 bg-light shadow-sm">
+                <!-- Formulario para una nueva película -->
+                <form action="/cine/nueva" method="POST">
+                    <div class="mb-3 row align-items-center">
+                        <!-- Campo de "Nombre de la película" -->
+                        <label for="titulo" class="col-sm-3 form-label mb-0">Nombre de Peli:</label>
+                        <div class="col-sm-9">
+                            <input type="text" class="form-control" id="titulo" name="titulo"
+                                value="{{ session.get('form_titulo', '') }}">
+                        </div>
+                    </div>
+                    <div class="mb-3 row align-items-center">
+                        <!-- Campo de "Director de la película" -->
+                        <label for="director" class="col-sm-3 form-label mb-0">Director:</label>
+                        <div class="col-sm-9">
+                            <input type="text" class="form-control" id="director" name="director"
+                                value="{{ session.get('form_director', '') }}">
+                        </div>
+                    </div>
+                    <div class="mb-3 row align-items-center">
+                        <!-- Campo de "Fecha de estreno de la película" -->
+                        <label for="fecha_estreno" class="col-sm-3 form-label mb-0">Fecha Estreno:</label>
+                        <div class="col-sm-9">
+                            <input type="date" class="form-control" id="fecha_estreno" name="fecha_estreno"
+                                value="{{ session.get('form_fecha', '') }}">
+                        </div>
+                    </div>
+                    <div class="mb-4 row">
+                        <!-- Campo de "Sinopsis de la película" -->
+                        <label for="sinopsis" class="col-sm-3 form-label mt-1">Sinopsis:</label>
+                        <div class="col-sm-9">
+                            <textarea class="form-control" id="sinopsis" name="sinopsis"
+                                rows="4">{{ session.get('form_sinopsis', '') }}</textarea>
+                        </div>
+                    </div>
+                    <div class="text-end">
+                        <button type="submit" class="btn btn-primary px-4">Guardar Película</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
