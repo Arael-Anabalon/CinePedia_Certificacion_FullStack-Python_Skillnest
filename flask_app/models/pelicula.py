@@ -2,14 +2,17 @@ from flask_app.config.pymysqlconnection import connectToMySQL
 
 class Pelicula:
     def __init__(self, data):
+        # Datos propios de la tabla
         self.id_pelicula = data['id_pelicula']
         self.titulo = data['titulo']
         self.director = data['director']
         self.fecha_estreno = data['fecha_estreno']
         self.sinopsis = data['sinopsis']
         self.publicador_id = data['publicador_id']
+        # Datos del publicador obtenidos gracias a JOIN
         self.publicador_nombre = data.get('publicador_nombre', '')
 
+    # Insertar una nueva película a la DB
     @classmethod
     def guardar_pelicula(cls, data):
         query = """
@@ -18,6 +21,7 @@ class Pelicula:
         """
         return connectToMySQL().query_db(query, data)
 
+    # Editar una película de la DB
     @classmethod
     def editar_pelicula(cls, data):
         query = """
@@ -27,11 +31,13 @@ class Pelicula:
         """
         return connectToMySQL().query_db(query, data)
 
+    # Eliminar una película de la DB
     @classmethod
     def eliminar_pelicula(cls, id_pelicula):
         query = "DELETE FROM peliculas WHERE id_pelicula = %(id)s;"
         return connectToMySQL().query_db(query, {'id': id_pelicula})
 
+    # Traer todas las películas de la DB junto con queien la publicó
     @classmethod
     def obtener_todas(cls):
         query = """
@@ -46,6 +52,7 @@ class Pelicula:
                 peliculas.append(cls(fila))
         return peliculas
 
+    # Buscar una película en especifico por su ID
     @classmethod
     def obtener_por_id(cls, id_pelicula):
         query = """
@@ -59,6 +66,7 @@ class Pelicula:
             return None
         return cls(resultados[0])
 
+    # Buscar una película por su título (Validador)
     @classmethod
     def obtener_por_titulo(cls, titulo):
         query = "SELECT * FROM peliculas WHERE titulo = %(titulo)s;"
@@ -67,6 +75,7 @@ class Pelicula:
             return None
         return cls(resultados[0])
 
+    # Evitar títulos duplicados
     @classmethod
     def verificar_titulo_edicion(cls, titulo, id_pelicula):
         query = "SELECT * FROM peliculas WHERE titulo = %(titulo)s AND id_pelicula != %(id)s;"

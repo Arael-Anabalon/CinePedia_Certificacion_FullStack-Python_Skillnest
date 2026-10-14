@@ -2,14 +2,17 @@ from flask_app.config.pymysqlconnection import connectToMySQL
 
 class Comentario:
     def __init__(self, data):
+        # Datos propios de la tabla
         self.id_comentario = data['id_comentario']
         self.contenido = data['contenido']
         self.comentador_id = data['comentador_id']
         self.pelicula_id = data['pelicula_id']
         self.created_at = data['created_at']
         self.updated_at = data['updated_at']
+        # Datos del comentador obtenidos gracias a JOIN
         self.comentador_nombre = data.get('comentador_nombre', '')
 
+    # Insertar un nuevo comentario a la DB
     @classmethod
     def guardar_comentario(cls, data):
         query = """
@@ -18,6 +21,7 @@ class Comentario:
         """
         return connectToMySQL().query_db(query, data)
 
+    # Obtener todos los comentarios de una película específica
     @classmethod
     def obtener_por_pelicula(cls, id_pelicula):
         query = """
@@ -34,6 +38,7 @@ class Comentario:
                 comentarios.append(cls(fila))
         return comentarios
 
+    # Buscar un cometario por ID
     @classmethod
     def obtener_por_id(cls, id_comentario):
         query = "SELECT * FROM comentarios WHERE id_comentario = %(id)s;"
@@ -42,6 +47,7 @@ class Comentario:
             return None
         return cls(resultados[0])
 
+    # Eliminar un comentario por ID
     @classmethod
     def eliminar_comentario(cls, id_comentario):
         query = "DELETE FROM comentarios WHERE id_comentario = %(id)s;"

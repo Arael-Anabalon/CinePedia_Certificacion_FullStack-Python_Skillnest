@@ -2,8 +2,10 @@ from flask import Blueprint, render_template, request, redirect, session, flash
 from flask_app.models.pelicula import Pelicula
 from flask_app.models.comentario import Comentario
 
+# Inicialización del Blueprint de películas
 peliculas_bp = Blueprint('peliculas', __name__)
 
+# Ruta para el panel principal de películas (dashboard)
 @peliculas_bp.route('/cine')
 def dashboard():
     if 'usuario_id' not in session:
@@ -11,6 +13,7 @@ def dashboard():
     todas_peliculas = Pelicula.obtener_todas()
     return render_template('peliculas.html', peliculas=todas_peliculas)
 
+# Ruta para el formulario y la lógica de una nueva película
 @peliculas_bp.route('/cine/nueva', methods=['GET', 'POST'])
 def nueva_pelicula():
     if 'usuario_id' not in session:
@@ -37,8 +40,12 @@ def nueva_pelicula():
             return redirect('/cine/nueva')
 
         data = {
-            'titulo': titulo, 'director': director, 'fecha_estreno': fecha_estreno,
-            'sinopsis': sinopsis, 'publicador_id': session['usuario_id'], 'created_by': session['usuario_nombre']
+            'titulo': titulo, 
+            'director': director, 
+            'fecha_estreno': fecha_estreno,
+            'sinopsis': sinopsis, 
+            'publicador_id': session['usuario_id'], 
+            'created_by': session['usuario_nombre']
         }
         Pelicula.guardar_pelicula(data)
 
@@ -50,6 +57,7 @@ def nueva_pelicula():
 
     return render_template('nueva_pelicula.html')
 
+# Ruta para ver el detalle de una película y sus respectivos comentarios
 @peliculas_bp.route('/cine/<int:id_pelicula>')
 def ver_pelicula(id_pelicula):
     if 'usuario_id' not in session:
@@ -60,6 +68,7 @@ def ver_pelicula(id_pelicula):
     lista_comentarios = Comentario.obtener_por_pelicula(id_pelicula)
     return render_template('ver_pelicula.html', pelicula=pelicula_seleccionada, comentarios=lista_comentarios)
 
+# Ruta para el formulario y la lógica de edición de una película
 @peliculas_bp.route('/cine/editar/<int:id_pelicula>', methods=['GET', 'POST'])
 def editar_pelicula(id_pelicula):
     if 'usuario_id' not in session:
@@ -101,6 +110,7 @@ def editar_pelicula(id_pelicula):
 
     return render_template('editar_pelicula.html', pelicula=pelicula_seleccionada)
 
+# Ruta para borrar una película
 @peliculas_bp.route('/cine/borrar/<int:id_pelicula>')
 def borrar_pelicula(id_pelicula):
     if 'usuario_id' not in session:
@@ -110,6 +120,7 @@ def borrar_pelicula(id_pelicula):
         Pelicula.eliminar_pelicula(id_pelicula)
     return redirect('/cine')
 
+# Ruta para guardar un nuevo comentario en una película
 @peliculas_bp.route('/comentario/guardar/<int:id_pelicula>', methods=['POST'])
 def guardar_comentario(id_pelicula):
     if 'usuario_id' not in session:
@@ -122,12 +133,15 @@ def guardar_comentario(id_pelicula):
 
     if contenido:
         data = {
-            'contenido': contenido, 'comentador_id': session['usuario_id'],
-            'pelicula_id': id_pelicula, 'created_by': session['usuario_nombre']
+            'contenido': contenido, 
+            'comentador_id': session['usuario_id'],
+            'pelicula_id': id_pelicula, 
+            'created_by': session['usuario_nombre']
         }
         Comentario.guardar_comentario(data)
     return redirect(f'/cine/{id_pelicula}')
 
+# Ruta para eliminar un comentario
 @peliculas_bp.route('/comentario/eliminar/<int:id_comentario>')
 def eliminar_comentario(id_comentario):
     if 'usuario_id' not in session:

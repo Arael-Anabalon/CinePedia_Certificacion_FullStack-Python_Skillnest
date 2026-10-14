@@ -13,7 +13,6 @@ CREATE TABLE IF NOT EXISTS usuarios (
     updated_at DATETIME NULL ON UPDATE CURRENT_TIMESTAMP, 
     created_by VARCHAR(50), 
     updated_by VARCHAR(50), 
-    deleted TINYINT(1) NOT NULL DEFAULT 0, 
     CONSTRAINT uq_email UNIQUE (email) 
 ); 
 
@@ -29,7 +28,6 @@ CREATE TABLE IF NOT EXISTS peliculas (
     updated_at DATETIME NULL ON UPDATE CURRENT_TIMESTAMP, 
     created_by VARCHAR(50), 
     updated_by VARCHAR(50), 
-    deleted TINYINT(1) NOT NULL DEFAULT 0, 
     FOREIGN KEY (publicador_id) REFERENCES usuarios(id_usuario) ON DELETE CASCADE 
 ); 
 
@@ -43,7 +41,6 @@ CREATE TABLE IF NOT EXISTS comentarios (
     updated_at DATETIME NULL ON UPDATE CURRENT_TIMESTAMP, 
     created_by VARCHAR(50), 
     updated_by VARCHAR(50), 
-    deleted TINYINT(1) NOT NULL DEFAULT 0, 
     FOREIGN KEY (comentador_id) REFERENCES usuarios(id_usuario) ON DELETE CASCADE, 
     FOREIGN KEY (pelicula_id) REFERENCES peliculas(id_pelicula) ON DELETE CASCADE 
 );

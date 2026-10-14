@@ -3,21 +3,26 @@ from flask_app.models.usuario import Usuario
 from flask_app import bcrypt
 import re
 
+# Inicialización del Blueprint de usuarios
 usuarios_bp = Blueprint('usuarios', __name__)
+# Expresión regular para validar correos electrónicos 
 EMAIL_REGEX = re.compile(r'^[a-zA-Z0-9.+_-]+@[a-zA-Z0-9._-]+\.[a-zA-Z]+$')
 
+# Ruta para la pagina de inicio de sesión
 @usuarios_bp.route('/')
 def iniciar_sesion():
     if 'usuario_id' in session:
         return redirect('/cine') 
     return render_template('iniciar_sesion.html')
 
+# Ruta para la pagina de registrarse
 @usuarios_bp.route('/registrarse')
 def registrarse():
     if 'usuario_id' in session:
         return redirect('/cine')
     return render_template('registrarse.html')
 
+# Ruta procesadora del registro de usuarios
 @usuarios_bp.route('/procesar_registro', methods=['POST'])
 def procesar_registro():
     nombre = request.form.get('nombre', '').strip()
@@ -64,6 +69,7 @@ def procesar_registro():
     session['usuario_nombre'] = nombre
     return redirect('/cine')
 
+# Ruta procesadora de las credenciales del inicio de sesión
 @usuarios_bp.route('/procesar_inicio_sesion', methods=['POST'])
 def procesar_inicio_sesion():
     email = request.form.get('email', '').strip()
@@ -82,6 +88,7 @@ def procesar_inicio_sesion():
     session['usuario_nombre'] = usuario_encontrado.nombre
     return redirect('/cine')
 
+# Ruta para cerrar la sesión
 @usuarios_bp.route('/logout')
 def logout():
     session.clear()
